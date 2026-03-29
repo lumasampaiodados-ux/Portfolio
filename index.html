@@ -3,365 +3,78 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luma Sampaio — Analista de Dados</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Luma Sampaio — Portfólio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #080A10;
-  --surface: #0F1220;
-  --border: rgba(255,255,255,0.07);
-  --orange: #FF6B1A;
-  --orange2: #FF8C42;
-  --coral: #FF4D6D;
-  --teal: #06D6A0;
-  --blue: #4EA8FF;
-  --text: #F0F2FF;
-  --text2: #8B91B0;
-  --text3: #4A5070;
-}
-
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: 'Inter', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Animated background grid */
-.bg-grid {
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255,107,26,.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,107,26,.04) 1px, transparent 1px);
-  background-size: 60px 60px;
-  animation: gridDrift 20s linear infinite;
-}
-
-@keyframes gridDrift {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(60px); }
-}
-
-/* Glow orbs */
-.orb {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: .25;
-  animation: float 8s ease-in-out infinite;
-}
-
-.orb-1 {
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, #FF6B1A, transparent);
-  top: -200px; right: -100px;
-  animation-delay: 0s;
-}
-
-.orb-2 {
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, #06D6A0, transparent);
-  bottom: -150px; left: -100px;
-  animation-delay: 3s;
-}
-
-.orb-3 {
-  width: 300px; height: 300px;
-  background: radial-gradient(circle, #4EA8FF, transparent);
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  animation-delay: 6s;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-30px) scale(1.05); }
-}
-
-/* Main container */
-.container {
-  position: relative;
-  z-index: 10;
-  text-align: center;
-  padding: 40px 24px;
-  animation: appear .8s cubic-bezier(.4,0,.2,1) both;
-}
-
-@keyframes appear {
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Badge */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(6,214,160,.1);
-  border: 1px solid rgba(6,214,160,.25);
-  border-radius: 30px;
-  padding: 6px 16px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--teal);
-  margin-bottom: 32px;
-  animation: appear .8s .1s cubic-bezier(.4,0,.2,1) both;
-}
-
-.badge-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--teal);
-  box-shadow: 0 0 8px var(--teal);
-  animation: blink 2s infinite;
-}
-
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-
-/* Heading */
-h1 {
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(42px, 7vw, 80px);
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -2px;
-  animation: appear .8s .2s cubic-bezier(.4,0,.2,1) both;
-}
-
-h1 .name-gradient {
-  background: linear-gradient(135deg, #FF8C42 0%, #FF4D6D 50%, #9B72FF 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.subtitle {
-  font-size: clamp(14px, 2vw, 18px);
-  color: var(--text2);
-  margin-top: 16px;
-  font-weight: 400;
-  letter-spacing: 0.3px;
-  max-width: 520px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.6;
-  animation: appear .8s .3s cubic-bezier(.4,0,.2,1) both;
-}
-
-/* Divider */
-.divider {
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, var(--orange), var(--coral));
-  border-radius: 2px;
-  margin: 32px auto;
-  animation: appear .8s .4s cubic-bezier(.4,0,.2,1) both;
-}
-
-/* Entry question */
-.entry-label {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--text3);
-  margin-bottom: 20px;
-  animation: appear .8s .5s cubic-bezier(.4,0,.2,1) both;
-}
-
-/* Version buttons */
-.version-cards {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  flex-wrap: wrap;
-  animation: appear .8s .6s cubic-bezier(.4,0,.2,1) both;
-}
-
-.version-card {
-  position: relative;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 28px 36px;
-  cursor: pointer;
-  text-decoration: none;
-  color: var(--text);
-  transition: all .3s cubic-bezier(.4,0,.2,1);
-  min-width: 200px;
-  overflow: hidden;
-  display: block;
-}
-
-.version-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,107,26,.12), rgba(255,77,109,.06));
-  opacity: 0;
-  transition: opacity .3s;
-}
-
-.version-card:hover::before { opacity: 1; }
-
-.version-card:hover {
-  border-color: rgba(255,107,26,.4);
-  transform: translateY(-4px);
-  box-shadow: 0 20px 60px rgba(255,107,26,.2), 0 0 0 1px rgba(255,107,26,.2);
-}
-
-.version-card:active { transform: translateY(-2px); }
-
-.version-card.mobile {
-  background: var(--surface);
-}
-
-.version-card.mobile::before {
-  background: linear-gradient(135deg, rgba(6,214,160,.1), rgba(78,168,255,.06));
-}
-
-.version-card.mobile:hover {
-  border-color: rgba(6,214,160,.4);
-  box-shadow: 0 20px 60px rgba(6,214,160,.15), 0 0 0 1px rgba(6,214,160,.2);
-}
-
-.card-icon {
-  font-size: 36px;
-  margin-bottom: 12px;
-  display: block;
-}
-
-.card-title {
-  font-family: 'Inter', sans-serif;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 6px;
-}
-
-.card-desc {
-  font-size: 11px;
-  color: var(--text2);
-  line-height: 1.5;
-}
-
-.card-arrow {
-  position: absolute;
-  bottom: 16px;
-  right: 20px;
-  font-size: 18px;
-  opacity: .3;
-  transition: all .3s;
-}
-
-.version-card:hover .card-arrow {
-  opacity: 1;
-  transform: translateX(4px);
-}
-
-/* Tech stack mini */
-.tech-row {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 40px;
-  animation: appear .8s .8s cubic-bezier(.4,0,.2,1) both;
-}
-
-.tech-chip {
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 8px;
-  padding: 4px 10px;
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--text3);
-  letter-spacing: 0.5px;
-}
-
-/* Footer */
-.footer-note {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 10px;
-  color: var(--text3);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-@media (max-width: 480px) {
-  .version-cards { flex-direction: column; align-items: center; }
-  .version-card { width: 100%; max-width: 280px; }
-  h1 { font-size: 38px; }
-  body { overflow-y: auto; }
-}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:#080A10;color:#F0F2FF;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(255,107,26,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,26,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);opacity:.2;pointer-events:none;}
+.orb-1{width:500px;height:500px;background:radial-gradient(circle,#FF6B1A,transparent);top:-200px;right:-100px;}
+.orb-2{width:400px;height:400px;background:radial-gradient(circle,#06D6A0,transparent);bottom:-150px;left:-80px;}
+.wrap{position:relative;z-index:10;text-align:center;padding:40px 24px;animation:up .7s cubic-bezier(.4,0,.2,1) both;}
+@keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.badge{display:inline-flex;align-items:center;gap:7px;background:rgba(6,214,160,.1);border:1px solid rgba(6,214,160,.25);border-radius:30px;padding:5px 14px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#06D6A0;margin-bottom:28px;}
+.dot{width:6px;height:6px;border-radius:50%;background:#06D6A0;box-shadow:0 0 8px #06D6A0;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-size:clamp(38px,6vw,72px);font-weight:800;line-height:1;letter-spacing:-2px;background:linear-gradient(135deg,#FF8C42,#FF4D6D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;}
+.sub{font-size:clamp(13px,1.8vw,17px);color:#8B91B0;font-weight:400;margin-bottom:10px;}
+.tagline{font-size:12px;color:#4A5070;font-style:italic;margin-bottom:36px;}
+.divider{width:48px;height:2px;background:linear-gradient(90deg,#FF6B1A,#FF4D6D);border-radius:2px;margin:0 auto 28px;}
+.label{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#4A5070;margin-bottom:16px;}
+.cards{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.card{display:flex;align-items:center;gap:14px;background:#0F1220;border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:20px 26px;cursor:pointer;text-decoration:none;color:#F0F2FF;transition:all .3s;min-width:220px;}
+.card:hover{transform:translateY(-3px);border-color:rgba(255,107,26,.35);box-shadow:0 16px 50px rgba(255,107,26,.15);}
+.card-ico{font-size:28px;flex-shrink:0;}
+.card-info{text-align:left;}
+.card-title{font-size:16px;font-weight:700;}
+.card-desc{font-size:11px;color:#8B91B0;margin-top:3px;}
+.chips{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-top:32px;}
+.chip{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:4px 10px;font-size:10px;font-weight:600;color:#4A5070;}
+.redir-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(8,10,16,.95);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.06);padding:14px;text-align:center;font-size:11px;color:#4A5070;animation:up .5s .4s both;}
+@media(max-width:480px){.cards{flex-direction:column;align-items:center;}.card{width:100%;max-width:300px;}}
 </style>
 </head>
 <body>
-
 <div class="bg-grid"></div>
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
-
-<div class="container">
-
-  <div class="badge">
-    <span class="badge-dot"></span>
-    Portfólio Interativo
-  </div>
-
-  <h1><span class="name-gradient">Luma Sampaio</span></h1>
-
-  <p class="subtitle">
-    Analista de Dados · Power BI · SQL · Automação<br>
-    Dados que geram decisão, não só relatórios.
-  </p>
-
+<div class="wrap">
+  <div class="badge"><span class="dot"></span>Portfólio Interativo</div>
+  <h1>Luma Sampaio</h1>
+  <p class="sub">Analista de Dados · Power BI · SQL · Automação</p>
+  <p class="tagline">Dados que geram decisão, não só relatórios.</p>
   <div class="divider"></div>
-
-  <div class="entry-label">Escolha sua experiência</div>
-
-  <div class="version-cards">
-    <a href="portfolio.html" class="version-card desktop">
-      <span class="card-icon">🖥️</span>
-      <div class="card-title">Versão Desktop</div>
-      <div class="card-desc">Experiência completa<br>com todos os detalhes</div>
-      <span class="card-arrow">→</span>
+  <div class="label">Escolha sua experiência</div>
+  <div class="cards">
+    <a href="portfolio_desktop.html" class="card">
+      <span class="card-ico">🖥️</span>
+      <div class="card-info"><div class="card-title">Versão Desktop</div><div class="card-desc">Experiência completa e detalhada</div></div>
     </a>
-    <a href="portfolio.html" class="version-card mobile">
-      <span class="card-icon">📱</span>
-      <div class="card-title">Versão Mobile</div>
-      <div class="card-desc">Otimizado para<br>telas menores</div>
-      <span class="card-arrow">→</span>
+    <a href="portfolio_mobile.html" class="card">
+      <span class="card-ico">📱</span>
+      <div class="card-info"><div class="card-title">Versão Mobile</div><div class="card-desc">Otimizado para smartphones</div></div>
     </a>
   </div>
-
-  <div class="tech-row">
-    <span class="tech-chip">Power BI</span>
-    <span class="tech-chip">SQL</span>
-    <span class="tech-chip">Python</span>
-    <span class="tech-chip">Qlik Sense</span>
-    <span class="tech-chip">Power Automate</span>
-    <span class="tech-chip">PCI DSS</span>
-    <span class="tech-chip">DAX</span>
+  <div class="chips">
+    <span class="chip">Power BI</span><span class="chip">SQL</span><span class="chip">Python</span>
+    <span class="chip">DAX</span><span class="chip">Qlik Sense</span><span class="chip">PCI DSS</span>
+    <span class="chip">ETL</span><span class="chip">Power Automate</span>
   </div>
-
 </div>
-
-<div class="footer-note">São Paulo · SP</div>
-
+<div class="redir-bar" id="redir"></div>
+<script>
+(function(){
+  var mob=/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)||window.innerWidth<768;
+  var bar=document.getElementById('redir');
+  if(mob){
+    bar.textContent='📱 Dispositivo mobile detectado — redirecionando…';
+    setTimeout(function(){window.location.href='portfolio_mobile.html';},1400);
+  } else {
+    bar.textContent='🖥️ Desktop detectado — redirecionando…';
+    setTimeout(function(){window.location.href='portfolio_desktop.html';},1400);
+  }
+})();
+</script>
 </body>
 </html>

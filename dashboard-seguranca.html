@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Segurança</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070910;--surface:#0D1018;--surface2:#141820;--border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.11);--green:#06D6A0;--green2:#00B890;--coral:#FF4D6D;--yellow:#FFD166;--blue:#4EA8FF;--orange:#FF8C42;--purple:#9B72FF;--text:#E8EEFF;--text2:#8090B0;--text3:#4A5570;--r:14px;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--surface);}::-webkit-scrollbar-thumb{background:var(--green);border-radius:4px;}
+.shell{display:flex;min-height:100vh;}
+.sidebar{width:230px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;}
+.logo-wrap{padding:24px 22px 20px;border-bottom:1px solid var(--border);}
+.back-btn{display:flex;align-items:center;gap:6px;background:rgba(6,214,160,.08);border:1px solid rgba(6,214,160,.15);border-radius:8px;padding:7px 12px;font-size:11px;font-weight:600;color:var(--green);text-decoration:none;margin-bottom:14px;transition:all .2s;font-family:inherit;}
+.back-btn:hover{background:rgba(6,214,160,.14);border-color:rgba(6,214,160,.3);}
+.logo-eyebrow{display:flex;align-items:center;gap:6px;margin-bottom:7px;}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.logo-eyebrow span{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--green);}
+.logo-name{font-size:20px;font-weight:900;background:linear-gradient(135deg,#06D6A0,#4EA8FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.logo-sub{font-size:11px;color:var(--text3);margin-top:3px;}
+.nav{flex:1;padding:18px 12px;overflow-y:auto;}
+.nav-group{margin-bottom:22px;}
+.nav-group-label{font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--text3);padding:0 10px;margin-bottom:6px;}
+.nav-item{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:10px;border:1px solid transparent;background:none;color:var(--text2);font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;text-align:left;transition:all .2s;margin-bottom:2px;}
+.nav-item:hover{background:rgba(6,214,160,.08);color:var(--green);}
+.nav-item.active{background:linear-gradient(135deg,rgba(6,214,160,.15),rgba(78,168,255,.08));color:var(--text);border-color:rgba(6,214,160,.25);}
+.nav-icon{font-size:16px;width:22px;text-align:center;flex-shrink:0;}
+.nav-badge{margin-left:auto;background:var(--coral);color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px;box-shadow:0 0 8px rgba(255,77,109,.5);}
+.sidebar-bottom{padding:16px 22px;border-top:1px solid var(--border);}
+.sidebar-time{font-size:11px;color:var(--text3);}
+.sidebar-time strong{display:block;font-size:20px;font-weight:800;color:var(--text);margin-bottom:2px;}
+.main{margin-left:230px;flex:1;display:flex;flex-direction:column;}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.topbar-left{display:flex;align-items:center;gap:16px;}
+.page-title{font-size:18px;font-weight:800;}
+.breadcrumb{font-size:12px;color:var(--text3);}
+.breadcrumb span{color:var(--green);}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.chip{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:500;color:var(--text2);}
+.notif-btn{position:relative;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;}
+.notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--coral);box-shadow:0 0 6px var(--coral);border:1.5px solid var(--surface);}
+.avatar{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--green),var(--blue));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;}
+.page{display:none;padding:28px 32px;animation:fadeUp .35s ease;}
+.page.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:22px;}
+.sec-title{font-size:16px;font-weight:800;}
+.sec-tag{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:20px;}
+.tag-green{background:rgba(6,214,160,.12);color:var(--green);border:1px solid rgba(6,214,160,.25);}
+.tag-coral{background:rgba(255,77,109,.12);color:var(--coral);border:1px solid rgba(255,77,109,.25);}
+.tag-yellow{background:rgba(255,209,102,.1);color:var(--yellow);border:1px solid rgba(255,209,102,.2);}
+.tag-blue{background:rgba(78,168,255,.12);color:var(--blue);border:1px solid rgba(78,168,255,.25);}
+.kpi-grid{display:grid;gap:16px;}
+.g4{grid-template-columns:repeat(4,1fr);}
+.g3{grid-template-columns:repeat(3,1fr);}
+.g2{grid-template-columns:repeat(2,1fr);}
+.g65{grid-template-columns:62% 38%;}
+.mt16{margin-top:16px;}.mt24{margin-top:24px;}.mt32{margin-top:32px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s;}
+.card:hover{transform:translateY(-2px);border-color:var(--border2);}
+.card-green{border-top:2px solid var(--green);}
+.card-coral{border-top:2px solid var(--coral);}
+.card-yellow{border-top:2px solid var(--yellow);}
+.card-blue{border-top:2px solid var(--blue);}
+.card-glow-g{box-shadow:0 0 0 1px rgba(6,214,160,.2),0 0 28px rgba(6,214,160,.2);border-color:rgba(6,214,160,.3);}
+.card-glow-c{box-shadow:0 0 0 1px rgba(255,77,109,.2),0 0 28px rgba(255,77,109,.25);border-color:rgba(255,77,109,.3);}
+.kpi-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
+.kpi-val{font-size:28px;font-weight:900;color:var(--text);line-height:1;letter-spacing:-0.5px;}
+.kv-green{background:linear-gradient(135deg,#06D6A0,#4EA8FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.kpi-sub{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3);margin-top:8px;}
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;}
+.b-up{background:rgba(6,214,160,.15);color:var(--green);}
+.b-down{background:rgba(255,77,109,.15);color:var(--coral);}
+.b-flat{background:rgba(255,209,102,.12);color:var(--yellow);}
+.card-icon{position:absolute;top:16px;right:18px;font-size:28px;opacity:.06;}
+.prog-wrap{margin-top:14px;}
+.prog-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-bottom:5px;}
+.prog-bar{height:6px;background:var(--surface2);border-radius:10px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--green),var(--blue));}
+.prog-fill.coral{background:linear-gradient(90deg,var(--coral),#FF8C42);}
+.prog-fill.yellow{background:linear-gradient(90deg,var(--yellow),#FFA500);}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;}
+.chart-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.chart-title{font-size:13px;font-weight:700;color:var(--text);}
+.mini-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:11px;}
+.mini-bar-lbl{width:130px;font-size:11px;color:var(--text2);flex-shrink:0;}
+.mini-bar-bg{flex:1;height:7px;background:var(--surface2);border-radius:10px;overflow:hidden;}
+.mini-bar-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--green),var(--blue));}
+.mini-bar-val{width:52px;text-align:right;font-size:11px;font-weight:700;color:var(--text);}
+.alert-row{display:flex;align-items:center;gap:14px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px;transition:transform .2s;}
+.alert-row:hover{transform:translateX(4px);}
+.alert-row.danger{border-left:3px solid var(--coral);}
+.alert-row.warn{border-left:3px solid var(--yellow);}
+.alert-row.ok{border-left:3px solid var(--green);}
+.alert-row.info{border-left:3px solid var(--blue);}
+.alert-ico{font-size:20px;flex-shrink:0;}
+.alert-body{flex:1;}
+.alert-t{font-size:12px;font-weight:600;color:var(--text);}
+.alert-d{font-size:11px;color:var(--text3);margin-top:2px;}
+.alert-v{font-size:13px;font-weight:700;flex-shrink:0;}
+.tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:12px;}
+.tbl thead th{padding:10px 14px;text-align:left;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border);}
+.tbl thead th:first-child{border-radius:8px 0 0 0;}
+.tbl thead th:last-child{border-radius:0 8px 0 0;}
+.tbl tbody tr{border-bottom:1px solid var(--border);transition:background .15s;}
+.tbl tbody tr:hover{background:rgba(255,255,255,.03);}
+.tbl tbody td{padding:12px 14px;color:var(--text2);}
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:600;}
+.p-green{background:rgba(6,214,160,.12);color:var(--green);border:1px solid rgba(6,214,160,.2);}
+.p-blue{background:rgba(78,168,255,.1);color:var(--blue);border:1px solid rgba(78,168,255,.2);}
+.p-coral{background:rgba(255,77,109,.12);color:var(--coral);border:1px solid rgba(255,77,109,.2);}
+.p-yellow{background:rgba(255,209,102,.1);color:var(--yellow);border:1px solid rgba(255,209,102,.2);}
+.heat-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:14px;}
+.heat-cell{border-radius:8px;padding:10px 4px 8px;text-align:center;font-size:9px;font-weight:600;}
+@media(max-width:1200px){.g4{grid-template-columns:repeat(2,1fr);}.g2,.g65{grid-template-columns:1fr;}}
+@media(max-width:768px){.sidebar{display:none;}.main{margin-left:0;}.topbar{padding:0 16px;}.page{padding:20px 16px;}.g4,.g3{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+  <div class="logo-wrap">
+    <a href="javascript:history.back()" class="back-btn">← Portfólio</a>
+    <div class="logo-eyebrow"><span class="live-dot"></span><span>Monitoramento</span></div>
+    <div class="logo-name">Segurança</div>
+    <div class="logo-sub">Informação & Acessos</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-group">
+      <div class="nav-group-label">Visão</div>
+      <button class="nav-item active" onclick="goPage('p-overview')"><span class="nav-icon">🛡️</span>Overview</button>
+      <button class="nav-item" onclick="goPage('p-incidentes')"><span class="nav-icon">🚨</span>Incidentes<span class="nav-badge">3</span></button>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Controles</div>
+      <button class="nav-item" onclick="goPage('p-acessos')"><span class="nav-icon">🔑</span>Gestão de Acessos</button>
+      <button class="nav-item" onclick="goPage('p-lgpd')"><span class="nav-icon">📋</span>LGPD</button>
+      <button class="nav-item" onclick="goPage('p-phishing')"><span class="nav-icon">🎣</span>Phishing & Trein.</button>
+    </div>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="sidebar-time"><strong id="clock">--:--</strong><span id="dateStr">—</span></div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="page-title" id="pageTitle">Overview</div>
+      <div class="breadcrumb">Segurança › <span id="pageBread">Overview</span></div>
+    </div>
+    <div class="topbar-right">
+      <div class="chip">📅 <span id="monthChip">—</span></div>
+      <div class="chip" style="color:var(--green);border-color:rgba(6,214,160,.2)">🛡️ Protegido</div>
+      <div class="notif-btn">🔔<span class="notif-dot"></span></div>
+      <div class="avatar">LS</div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="page active" id="p-overview">
+    <div class="sec-head"><span class="sec-title">Overview de Segurança</span><span class="sec-tag tag-green">Jun 2025</span></div>
+    <div class="kpi-grid g4">
+      <div class="card card-glow-g">
+        <div class="card-icon">🛡️</div>
+        <div class="kpi-label">Postura de Segurança</div>
+        <div class="kpi-val kv-green">Boa</div>
+        <div class="kpi-sub"><span class="badge b-up">Score 78/100</span></div>
+        <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:78%"></div></div></div>
+      </div>
+      <div class="card card-glow-c">
+        <div class="card-icon">🚨</div>
+        <div class="kpi-label">Incidentes Ativos</div>
+        <div class="kpi-val" style="color:var(--coral)">3</div>
+        <div class="kpi-sub">em investigação</div>
+      </div>
+      <div class="card card-yellow">
+        <div class="card-icon">⚠️</div>
+        <div class="kpi-label">Vulnerabilidades</div>
+        <div class="kpi-val" style="color:var(--yellow)">14</div>
+        <div class="kpi-sub">7 críticas · 7 altas</div>
+        <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill yellow" style="width:60%"></div></div></div>
+      </div>
+      <div class="card card-green">
+        <div class="card-icon">✅</div>
+        <div class="kpi-label">Controles Ativos</div>
+        <div class="kpi-val kv-green">94,2%</div>
+        <div class="kpi-sub">dos controles implementados</div>
+        <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:94%"></div></div></div>
+      </div>
+    </div>
+    <div class="kpi-grid g4 mt16">
+      <div class="card card-blue"><div class="kpi-label">Usuários Monitorados</div><div class="kpi-val" style="color:var(--blue);font-size:22px">1.248</div><div class="kpi-sub">contas ativas</div></div>
+      <div class="card card-coral"><div class="kpi-label">Tentativas de Acesso Indev.</div><div class="kpi-val" style="color:var(--coral);font-size:22px">847</div><div class="kpi-sub">bloqueadas hoje</div></div>
+      <div class="card card-green"><div class="kpi-label">MFA Habilitado</div><div class="kpi-val kv-green" style="font-size:22px">89,4%</div><div class="kpi-sub">dos usuários críticos</div><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:89%"></div></div></div></div>
+      <div class="card card-yellow"><div class="kpi-label">Patches Pendentes</div><div class="kpi-val" style="color:var(--yellow);font-size:22px">23</div><div class="kpi-sub">sistemas desatualizados</div></div>
+    </div>
+
+    <div class="mt32 chart-card">
+      <div class="chart-head"><div class="chart-title">Eventos de Segurança — Últimos 7 dias</div></div>
+      <svg viewBox="0 0 700 140" style="width:100%;height:140px" preserveAspectRatio="none">
+        <defs><linearGradient id="gg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#06D6A0"/><stop offset="100%" stop-color="#4EA8FF" stop-opacity=".7"/></linearGradient></defs>
+        <line x1="0" y1="20"  x2="700" y2="20"  stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+        <line x1="0" y1="70"  x2="700" y2="70"  stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+        <line x1="0" y1="120" x2="700" y2="120" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+        <rect x="20"  y="60"  width="80" height="60"  rx="6" fill="rgba(6,214,160,.2)"/>
+        <rect x="120" y="45"  width="80" height="75"  rx="6" fill="rgba(6,214,160,.3)"/>
+        <rect x="220" y="35"  width="80" height="85"  rx="6" fill="rgba(6,214,160,.4)"/>
+        <rect x="320" y="80"  width="80" height="40"  rx="6" fill="rgba(255,77,109,.5)"/><!-- pico incidente -->
+        <rect x="420" y="50"  width="80" height="70"  rx="6" fill="rgba(6,214,160,.35)"/>
+        <rect x="520" y="40"  width="80" height="80"  rx="6" fill="url(#gg1)"/>
+        <rect x="620" y="30"  width="60" height="90"  rx="6" fill="url(#gg1)" style="filter:drop-shadow(0 0 8px rgba(6,214,160,.5))"/>
+        <text x="60"  y="135" font-size="9" text-anchor="middle" fill="var(--text3)">Seg</text>
+        <text x="160" y="135" font-size="9" text-anchor="middle" fill="var(--text3)">Ter</text>
+        <text x="260" y="135" font-size="9" text-anchor="middle" fill="var(--text3)">Qua</text>
+        <text x="360" y="135" font-size="9" text-anchor="middle" fill="var(--coral)" font-weight="bold">Qui ⚠</text>
+        <text x="460" y="135" font-size="9" text-anchor="middle" fill="var(--text3)">Sex</text>
+        <text x="560" y="135" font-size="9" text-anchor="middle" fill="var(--text3)">Sáb</text>
+        <text x="650" y="135" font-size="9" text-anchor="middle" fill="var(--green)" font-weight="bold">Dom</text>
+      </svg>
+    </div>
+
+    <div class="kpi-grid g65 mt24">
+      <div class="chart-card">
+        <div class="chart-head"><div class="chart-title">Distribuição de Eventos</div></div>
+        <div class="mini-bar-row mt16"><span class="mini-bar-lbl">Tentativas de Login</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:52%"></div></div><span class="mini-bar-val">52%</span></div>
+        <div class="mini-bar-row"><span class="mini-bar-lbl">Scans de Rede</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:22%;background:linear-gradient(90deg,var(--yellow),#FFA500)"></div></div><span class="mini-bar-val">22%</span></div>
+        <div class="mini-bar-row"><span class="mini-bar-lbl">Phishing Recebido</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:14%;background:linear-gradient(90deg,var(--coral),#FF8C42)"></div></div><span class="mini-bar-val">14%</span></div>
+        <div class="mini-bar-row"><span class="mini-bar-lbl">Malware Detectado</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:8%;background:linear-gradient(90deg,var(--purple),var(--blue))"></div></div><span class="mini-bar-val">8%</span></div>
+        <div class="mini-bar-row"><span class="mini-bar-lbl">Outros</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:4%;background:rgba(255,255,255,.15)"></div></div><span class="mini-bar-val">4%</span></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-head"><div class="chart-title">Dias da Semana</div></div>
+        <div class="heat-grid">
+          <div class="heat-cell" style="background:rgba(6,214,160,.2);color:var(--text2)">Seg<br><small style="font-size:8px">médio</small></div>
+          <div class="heat-cell" style="background:rgba(6,214,160,.3);color:white">Ter<br><small style="font-size:8px">alto</small></div>
+          <div class="heat-cell" style="background:rgba(6,214,160,.4);color:white">Qua<br><small style="font-size:8px">alto</small></div>
+          <div class="heat-cell" style="background:var(--coral);color:white;box-shadow:0 0 12px rgba(255,77,109,.4)">Qui<br><small style="font-size:8px">PICO</small></div>
+          <div class="heat-cell" style="background:rgba(6,214,160,.3);color:white">Sex<br><small style="font-size:8px">alto</small></div>
+          <div class="heat-cell" style="background:rgba(6,214,160,.12);color:var(--text3)">Sáb<br><small style="font-size:8px">baixo</small></div>
+          <div class="heat-cell" style="background:rgba(6,214,160,.08);color:var(--text3)">Dom<br><small style="font-size:8px">baixo</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INCIDENTES -->
+  <div class="page" id="p-incidentes">
+    <div class="sec-head"><span class="sec-title">Gestão de Incidentes</span><span class="sec-tag tag-coral">3 Ativos</span></div>
+    <div class="kpi-grid g4">
+      <div class="card card-glow-c"><div class="kpi-label">Incidentes Ativos</div><div class="kpi-val" style="color:var(--coral)">3</div><div class="kpi-sub">em investigação</div></div>
+      <div class="card card-yellow"><div class="kpi-label">Resolvidos (Mês)</div><div class="kpi-val" style="color:var(--yellow)">28</div><div class="kpi-sub">tempo médio: 4,2h</div></div>
+      <div class="card card-green"><div class="kpi-label">MTTR</div><div class="kpi-val kv-green">4,2h</div><div class="kpi-sub">Mean Time to Resolve</div></div>
+      <div class="card card-blue"><div class="kpi-label">SLA Cumprido</div><div class="kpi-val" style="color:var(--blue)">91,4%</div><div class="kpi-sub">dos incidentes</div><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:91%;background:linear-gradient(90deg,var(--blue),var(--green))"></div></div></div></div>
+    </div>
+    <div class="chart-card mt24">
+      <div class="chart-head"><div class="chart-title">Incidentes Ativos — Detalhamento</div></div>
+      <div class="alert-row danger">
+        <div class="alert-ico">🔴</div>
+        <div class="alert-body">
+          <div class="alert-t">INC-2025-0847 — Tentativa de Acesso a Dados de Cartão</div>
+          <div class="alert-d">Origem: IP externo · Alvo: ambiente de produção · Bloqueado pelo WAF · Em análise forense</div>
+        </div>
+        <div class="alert-v" style="color:var(--coral)">Crítico</div>
+      </div>
+      <div class="alert-row warn">
+        <div class="alert-ico">🟡</div>
+        <div class="alert-body">
+          <div class="alert-t">INC-2025-0851 — Usuário com Acessos Anômalos</div>
+          <div class="alert-d">Conta ativa em 3 IPs simultâneos · Fora do horário padrão · MFA ativado</div>
+        </div>
+        <div class="alert-v" style="color:var(--yellow)">Alto</div>
+      </div>
+      <div class="alert-row warn">
+        <div class="alert-ico">🟡</div>
+        <div class="alert-body">
+          <div class="alert-t">INC-2025-0854 — Phishing Sofisticado Detectado</div>
+          <div class="alert-d">18 colaboradores receberam o e-mail · 2 clicaram no link · Contas em quarentena</div>
+        </div>
+        <div class="alert-v" style="color:var(--yellow)">Alto</div>
+      </div>
+    </div>
+    <div class="chart-card mt24">
+      <div class="chart-head"><div class="chart-title">Histórico de Incidentes — Mês</div></div>
+      <table class="tbl">
+        <thead><tr><th>ID</th><th>Tipo</th><th>Severidade</th><th>Status</th><th>Tempo Resolução</th></tr></thead>
+        <tbody>
+          <tr><td>INC-0832</td><td>Acesso não autorizado</td><td><span class="pill p-coral">Crítico</span></td><td><span class="pill p-green">Resolvido</span></td><td>2h 14m</td></tr>
+          <tr><td>INC-0835</td><td>Malware endpoint</td><td><span class="pill p-yellow">Alto</span></td><td><span class="pill p-green">Resolvido</span></td><td>3h 42m</td></tr>
+          <tr><td>INC-0840</td><td>Phishing</td><td><span class="pill p-yellow">Alto</span></td><td><span class="pill p-green">Resolvido</span></td><td>1h 08m</td></tr>
+          <tr><td>INC-0844</td><td>Scan de rede interno</td><td><span class="pill p-blue">Médio</span></td><td><span class="pill p-green">Resolvido</span></td><td>5h 20m</td></tr>
+          <tr><td>INC-0847</td><td>Dados sensíveis</td><td><span class="pill p-coral">Crítico</span></td><td><span class="pill p-coral">Ativo</span></td><td>Em andamento</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ACESSOS -->
+  <div class="page" id="p-acessos">
+    <div class="sec-head"><span class="sec-title">Gestão de Acessos</span><span class="sec-tag tag-blue">IAM</span></div>
+    <div class="kpi-grid g4">
+      <div class="card card-blue"><div class="kpi-label">Usuários Ativos</div><div class="kpi-val" style="color:var(--blue)">1.248</div><div class="kpi-sub">contas habilitadas</div></div>
+      <div class="card card-glow-c"><div class="kpi-label">Contas Privilegiadas</div><div class="kpi-val" style="color:var(--coral)">84</div><div class="kpi-sub">admin / super admin</div></div>
+      <div class="card card-yellow"><div class="kpi-label">Acessos Revisados</div><div class="kpi-val" style="color:var(--yellow)">67,4%</div><div class="kpi-sub">revisão trimestral</div><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill yellow" style="width:67%"></div></div></div></div>
+      <div class="card card-glow-g"><div class="kpi-label">MFA Habilitado</div><div class="kpi-val kv-green">89,4%</div><div class="kpi-sub">meta: 100%</div><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:89%"></div></div></div></div>
+    </div>
+    <div class="chart-card mt24">
+      <div class="chart-head"><div class="chart-title">Alertas de Acesso</div></div>
+      <div class="alert-row danger"><div class="alert-ico">🔴</div><div class="alert-body"><div class="alert-t">14 contas sem MFA — perfil administrador</div><div class="alert-d">Usuários com acesso privilegiado sem segundo fator habilitado</div></div><div class="alert-v" style="color:var(--coral)">Urgente</div></div>
+      <div class="alert-row warn"><div class="alert-ico">🟡</div><div class="alert-body"><div class="alert-t">32 contas inativas há +90 dias</div><div class="alert-d">Colaboradores desligados sem revogação de acesso — revisar</div></div><div class="alert-v" style="color:var(--yellow)">Revisar</div></div>
+      <div class="alert-row warn"><div class="alert-ico">🟡</div><div class="alert-body"><div class="alert-t">Acessos fora do horário — 7 usuários</div><div class="alert-d">Logins entre 02h–05h da manhã — verificar legitimidade</div></div><div class="alert-v" style="color:var(--yellow)">Verificar</div></div>
+      <div class="alert-row ok"><div class="alert-ico">🟢</div><div class="alert-body"><div class="alert-t">Revisão de acesso — Financeiro concluída</div><div class="alert-d">128 usuários revisados · 6 acessos revogados</div></div><div class="alert-v" style="color:var(--green)">OK</div></div>
+    </div>
+    <div class="chart-card mt24">
+      <div class="chart-head"><div class="chart-title">Perfis de Acesso</div></div>
+      <div class="mini-bar-row mt16"><span class="mini-bar-lbl">Usuário padrão</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:72%"></div></div><span class="mini-bar-val">900</span></div>
+      <div class="mini-bar-row"><span class="mini-bar-lbl">Analista</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:20%"></div></div><span class="mini-bar-val">248</span></div>
+      <div class="mini-bar-row"><span class="mini-bar-lbl">Supervisor</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:8%;background:linear-gradient(90deg,var(--yellow),#FFA500)"></div></div><span class="mini-bar-val">100</span></div>
+      <div class="mini-bar-row"><span class="mini-bar-lbl">Admin</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:4%;background:linear-gradient(90deg,var(--coral),#FF8C42)"></div></div><span class="mini-bar-val">84</span></div>
+    </div>
+  </div>
+
+  <!-- LGPD -->
+  <div class="page" id="p-lgpd">
+    <div class="sec-head"><span class="sec-title">Conformidade LGPD</span><span class="sec-tag tag-green">Lei 13.709/18</span></div>
+    <div class="kpi-grid g4">
+      <div class="card card-glow-g"><div class="kpi-label">Conformidade Geral</div><div class="kpi-val kv-green">82%</div><div class="kpi-sub">dos requisitos</div><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:82%"></div></div></div></div>
+      <div class="card card-yellow"><div class="kpi-label">Titulares Cadastrados</div><div class="kpi-val" style="color:var(--yellow)">284.920</div><div class="kpi-sub">com consentimento</div></div>
+      <div class="card card-blue"><div class="kpi-label">Solicitações de Titular</div><div class="kpi-val" style="color:var(--blue)">47</div><div class="kpi-sub">no mês — 44 atendidas</div></div>
+      <div class="card card-coral"><div class="kpi-label">Incidentes LGPD</div><div class="kpi-val" style="color:var(--coral)">1</div><div class="kpi-sub">notificado à ANPD</div></div>
+    </div>
+    <div class="chart-card mt24">
+      <div class="chart-head"><div class="chart-title">Bases Legais de Tratamento</div></div>
+      <div class="mini-bar-row mt16"><span class="mini-bar-lbl">Contrato</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:42%"></div></div><span class="mini-bar-val">42%</span></div>
+      <div class="mini-bar-row"><span class="mini-bar-lbl">Consentimento</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:28%"></div></div><span class="mini-bar-val">28%</span></div>
+      <div class="mini-bar-row"><span class="mini-bar-lbl">Obrigação Legal</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:18%;background:linear-gradient(90deg,var(--yellow),#FFA500)"></div></div><span class="mini-bar-val">18%</span></div>
+      <div class="mini-bar-row"><span class="mini-bar-lbl">Legítimo Interesse</span><div class="mini-bar-bg"><div class="mini-bar-fill" style="width:12%;background:linear-gradient(90deg,var(--blue),var(--purple))"></div></div><span class="mini-bar-val">12%</span></div>
+    </div>
+    <div class="chart-card mt24">
+      <div class="chart-head"><div class="chart-title">Itens em Remediação</div></div>
+      <div class="alert-row warn"><div class="alert-ico">🟡</div><div class="alert-body"><div class="alert-t">Mapeamento de dados — Área Comercial incompleto</div><div class="alert-d">38% dos sistemas ainda sem inventário de dados pessoais</div></div><div class="alert-v" style="color:var(--yellow)">45 dias</div></div>
+      <div class="alert-row warn"><div class="alert-ico">🟡</div><div class="alert-body"><div class="alert-t">RIPD pendente — Projeto CRM v2</div><div class="alert-d">Relatório de Impacto ainda não elaborado para novo sistema</div></div><div class="alert-v" style="color:var(--yellow)">30 dias</div></div>
+      <div class="alert-row ok"><div class="alert-ico">🟢</div><div class="alert-body"><div class="alert-t">Política de Privacidade — atualizada</div><div class="alert-d">Versão 3.1 publicada · Titulares notificados</div></div><div class="alert-v" style="color:var(--green)">OK</div></div>
+    </div>
+  </div>
+
+  <!-- PHISHING -->
+  <div class="page" id="p-phishing">
+    <div class="sec-head"><span class="sec-title">Phishing & Treinamento</span><span class="sec-tag tag-blue">Conscientização</span></div>
+    <div class="kpi-grid g4">
+      <div class="card card-glow-g"><div class="kpi-label">Campanha Atual</div><div class="kpi-val kv-green">Q2-2025</div><div class="kpi-sub">Em andamento</div></div>
+      <div class="card card-yellow"><div class="kpi-label">Taxa de Clique</div><div class="kpi-val" style="color:var(--yellow)">11,2%</div><div class="kpi-sub">meta: abaixo de 5%</div><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill coral" style="width:45%"></div></div></div></div>
+      <div class="card card-green"><div class="kpi-label">Reportaram o Phishing</div><div class="kpi-val kv-green">68%</div><div class="kpi-sub">comportamento correto</div><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:68%"></div></div></div></div>
+      <div class="card card-blue"><div class="kpi-label">Treinamento Concluído</div><div class="kpi-val" style="color:var(--blue)">76%</div><div class="kpi-sub">dos colaboradores</div><div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:76%;background:linear-gradient(90deg,var(--blue),var(--purple))"></div></div></div></div>
+    </div>
+    <div class="chart-card mt24">
+      <div class="chart-head"><div class="chart-title">Resultados por Área</div></div>
+      <table class="tbl">
+        <thead><tr><th>Área</th><th>Colaboradores</th><th>Clicaram</th><th>Taxa Clique</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>TI</td><td>48</td><td>2</td><td>4,2%</td><td><span class="pill p-green">✅ Ótimo</span></td></tr>
+          <tr><td>Financeiro</td><td>32</td><td>3</td><td>9,4%</td><td><span class="pill p-yellow">⚡ Regular</span></td></tr>
+          <tr><td>Comercial</td><td>86</td><td>14</td><td>16,3%</td><td><span class="pill p-coral">❌ Crítico</span></td></tr>
+          <tr><td>Operações</td><td>124</td><td>18</td><td>14,5%</td><td><span class="pill p-coral">❌ Crítico</span></td></tr>
+          <tr><td>RH</td><td>22</td><td>1</td><td>4,5%</td><td><span class="pill p-green">✅ Ótimo</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+var pages={'p-overview':{title:'Overview',sub:'Overview'},'p-incidentes':{title:'Incidentes',sub:'Incidentes'},'p-acessos':{title:'Gestão de Acessos',sub:'Acessos'},'p-lgpd':{title:'LGPD',sub:'LGPD'},'p-phishing':{title:'Phishing & Treinamento',sub:'Phishing'}};
+function goPage(id){document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});document.getElementById(id).classList.add('active');var btn=document.querySelector('[onclick="goPage(\''+id+'\')"]');if(btn)btn.classList.add('active');document.getElementById('pageTitle').textContent=pages[id].title;document.getElementById('pageBread').textContent=pages[id].sub;}
+function tick(){var now=new Date();document.getElementById('clock').textContent=now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});document.getElementById('dateStr').textContent=now.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'short'});document.getElementById('monthChip').textContent=now.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});}
+tick();setInterval(tick,1000);
+</script>
+</body>
+</html>
